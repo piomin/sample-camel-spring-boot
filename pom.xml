@@ -16,13 +16,21 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<camel.version>2.18.2</camel.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
+			<version>${camel.version}</version>
 		</dependency>
 	</dependencies>
 
+	<modules>
+		<module>gateway</module>
+		<module>account</module>
+		<module>discovery</module>
+	</modules>
+		
 </project>
