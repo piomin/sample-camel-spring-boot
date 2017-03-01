@@ -21,9 +21,9 @@ public class AccountRoute extends RouteBuilder {
 	@Override
 	public void configure() throws Exception {
 		
-	       from("direct:put")
-           .to("consul:kv-put")
-               .to("log:camel-consul?level=INFO");
+//	       from("direct:put")
+//           .to("consul:kv-put")
+//               .to("log:camel-consul?level=INFO");
 	       
 		restConfiguration()
 			.component("netty4-http")

@@ -22,9 +22,9 @@ public class GatewayTest {
 	@Test
 	public void test1() throws InterruptedException {
 		System.out.println("Test");
-		Thread.sleep(1000);
+		Thread.sleep(3000);
 		mockEndpoint.setExpectedMessageCount(1);
-		template.sendBody("direct:test", "This is a test message");
+		template.sendBody("direct:start", "This is a test message");
 		mockEndpoint.assertIsSatisfied();
 	}
 	
