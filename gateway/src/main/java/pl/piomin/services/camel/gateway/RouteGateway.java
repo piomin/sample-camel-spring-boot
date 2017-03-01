@@ -17,11 +17,11 @@ public class RouteGateway extends RouteBuilder {
         from("direct:test").log("msg-${id}: ${body}").to("mock:test");
         
 		ConsulConfigurationDefinition config = new ConsulConfigurationDefinition();
-		config.setComponent("netty4-http");
+//		config.setComponent("netty-http");
 		config.setUrl("http://192.168.99.100:8500");
 		context.setServiceCallConfiguration(config);
 		
-        from("direct:start").serviceCall("account").log("msg-${id}: ${body}").to("mock:test");
+        from("direct:start").serviceCall("account", "http:account.host:account.port/dupa/1").to("mock:test");
     }
 
 }

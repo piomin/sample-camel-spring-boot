@@ -26,13 +26,13 @@ public class AccountRoute extends RouteBuilder {
 //               .to("log:camel-consul?level=INFO");
 	       
 		restConfiguration()
-			.component("netty4-http")
+			.component("netty-http")
 			.bindingMode(RestBindingMode.json)
 			.contextPath("/")
 			.port(4040)
 			.apiContextPath("api-doc").apiProperty("api.title", "Account API");
 
-		rest("/account")
+		rest("/dupa")
 			.get("/{id}")
 			.description("Find Account by id").outType(Account.class)
 			.param().name("id").type(RestParamType.path).description("User identificator").dataType("int").endParam()
