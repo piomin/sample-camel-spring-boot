@@ -9,5 +9,5 @@ public class CamelAccountService {
 	public static void main(String[] args) {
 		SpringApplication.run(CamelAccountService.class, args);
 	}
-
+	
 }

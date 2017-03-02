@@ -1,44 +1,49 @@
 package pl.piomin.services.camel.account;
 
-import org.apache.camel.CamelContext;
-import org.apache.camel.ProducerTemplate;
+import javax.annotation.PostConstruct;
+
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.consul.ConsulConstants;
-import org.apache.camel.component.consul.enpoint.ConsulKeyValueActions;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
-import org.apache.camel.model.rest.RestParamType;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import pl.piomin.services.camel.account.model.Account;
 
 @Component
 public class AccountRoute extends RouteBuilder {
-
-	@Autowired
-	CamelContext context;
 	
-	@Override
-	public void configure() throws Exception {
+	@Value("${port}")
+	private int port;
 		
-//	       from("direct:put")
-//           .to("consul:kv-put")
-//               .to("log:camel-consul?level=INFO");
-	       
+	@Override
+	public void configure() throws Exception {  
 		restConfiguration()
 			.component("netty4-http")
 			.bindingMode(RestBindingMode.json)
-			.contextPath("/")
-			.port(4040)
-			.apiContextPath("api-doc").apiProperty("api.title", "Account API");
-
-		rest("/account")
-			.get("/{id}")
-			.description("Find Account by id").outType(Account.class)
-			.param().name("id").type(RestParamType.path).description("User identificator").dataType("int").endParam()
-			.to("bean:accountService?method=findById(${header.id})");
+			.port(port);
 		
-//		from("").loadBalance().roundRobin();
+		from("timer://runOnce?repeatCount=1&delay=5000").to("bean:registration?method=register");
+		from("direct:start").marshal().json(JsonLibrary.Jackson)
+			.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+			.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+			.to("http://192.168.99.100:8500/v1/agent/service/register");
+		
+		rest("/")
+			.get("/{id}")
+				.to("bean:accountService?method=findById(${header.id})")
+			.get("/customer/{customerId}")
+				.to("bean:accountService?method=findByCustomerId(${header.customerId})")
+			.get("/")
+				.to("bean:accountService?method=findAll")
+			.post("/").consumes("application/json").type(Account.class)
+				.to("bean:accountService?method=add(${body})");
+		
 	}
 
+@PostConstruct
+public void info() {
+	System.out.println("fe");
+}
 }
