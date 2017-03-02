@@ -20,7 +20,7 @@ public class AccountRoute extends RouteBuilder {
 	@Override
 	public void configure() throws Exception {  
 		restConfiguration()
-			.component("netty4-http")
+			.component("netty-http")
 			.bindingMode(RestBindingMode.json)
 			.port(port);
 		
@@ -42,8 +42,4 @@ public class AccountRoute extends RouteBuilder {
 		
 	}
 
-@PostConstruct
-public void info() {
-	System.out.println("fe");
-}
 }
