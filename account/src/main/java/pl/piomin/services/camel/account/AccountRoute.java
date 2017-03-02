@@ -1,8 +1,7 @@
 package pl.piomin.services.camel.account;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.camel.Exchange;
+import org.apache.camel.ShutdownRunningTask;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -18,17 +17,19 @@ public class AccountRoute extends RouteBuilder {
 	private int port;
 		
 	@Override
-	public void configure() throws Exception {  
+	public void configure() throws Exception { 
+		
 		restConfiguration()
 			.component("netty-http")
 			.bindingMode(RestBindingMode.json)
 			.port(port);
 		
-		from("timer://runOnce?repeatCount=1&delay=5000").to("bean:registration?method=register");
 		from("direct:start").marshal().json(JsonLibrary.Jackson)
 			.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
 			.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 			.to("http://192.168.99.100:8500/v1/agent/service/register");
+		from("direct:stop").shutdownRunningTask(ShutdownRunningTask.CompleteAllTasks)
+			.toD("http://192.168.99.100:8500/v1/agent/service/deregister/${header.id}");
 		
 		rest("/")
 			.get("/{id}")

@@ -1,3 +1,7 @@
 camel:
   springboot:
     main-run-controller: true
+    
+logging:
+  level:
+    org.apache.camel: DEBUG
