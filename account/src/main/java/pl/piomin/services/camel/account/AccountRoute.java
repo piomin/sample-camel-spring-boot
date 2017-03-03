@@ -31,7 +31,7 @@ public class AccountRoute extends RouteBuilder {
 		from("direct:stop").shutdownRunningTask(ShutdownRunningTask.CompleteAllTasks)
 			.toD("http://192.168.99.100:8500/v1/agent/service/deregister/${header.id}");
 		
-		rest("/")
+		rest("/account")
 			.get("/{id}")
 				.to("bean:accountService?method=findById(${header.id})")
 			.get("/customer/{customerId}")

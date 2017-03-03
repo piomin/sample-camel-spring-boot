@@ -20,15 +20,16 @@ public class RouteGateway extends RouteBuilder {
 		config.setComponent("netty4-http");
 		config.setUrl("http://192.168.99.100:8500");
 		context.setServiceCallConfiguration(config);
-		
-        from("direct:start").serviceCall("account//acc/all").to("mock:test");
         
 		restConfiguration()
 		.component("netty4-http")
 		.bindingMode(RestBindingMode.json)
 		.port(8000);
 		
-		from("rest:get:account?produces=application/json").serviceCall("account//acc/all");
+		from("rest:get:account:/{id}").serviceCall("account");
+		from("rest:get:account:/customer/{customerId}").serviceCall("account");
+		from("rest:get:account:/").serviceCall("account");
+		from("rest:post:account:/").serviceCall("account");
     }
 
 }
