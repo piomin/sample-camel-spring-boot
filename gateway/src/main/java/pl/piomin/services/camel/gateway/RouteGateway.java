@@ -30,6 +30,9 @@ public class RouteGateway extends RouteBuilder {
 		from("rest:get:account:/customer/{customerId}").serviceCall("account");
 		from("rest:get:account:/").serviceCall("account");
 		from("rest:post:account:/").serviceCall("account");
+		from("rest:get:customer:/{id}").serviceCall("customer");
+		from("rest:get:customer:/").serviceCall("customer");
+		from("rest:post:customer:/").serviceCall("customer");
     }
 
 }

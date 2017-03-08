@@ -1,4 +1,4 @@
-package pl.piomin.services.camel.account.model;
+package pl.piomin.services.camel.common.model;
 
 public class Register {
 

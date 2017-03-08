@@ -27,7 +27,7 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-http</artifactId>
 			<version>${camel.version}</version>
-			</dependency>
+		</dependency>
 	</dependencies>
 
 </project>
