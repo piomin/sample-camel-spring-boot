@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import pl.piomin.services.camel.common.model.Account;
-import pl.piomin.services.camel.customer.model.Customer;
+import pl.piomin.services.camel.common.model.Customer;
 import pl.piomin.services.camel.customer.service.AggregationStrategyImpl;
 
 @Component

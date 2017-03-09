@@ -1,4 +1,4 @@
-package pl.piomin.services.camel.customer.model;
+package pl.piomin.services.camel.common.model;
 
 import java.util.List;
 

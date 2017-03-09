@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import pl.piomin.services.camel.customer.model.Customer;
+import pl.piomin.services.camel.common.model.Customer;
 
 @Service
 public class CustomerService {
