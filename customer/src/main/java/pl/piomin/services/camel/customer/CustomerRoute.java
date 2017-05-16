@@ -4,13 +4,19 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ShutdownRunningTask;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.consul.ConsulConfiguration;
+import org.apache.camel.component.consul.cloud.ConsulServiceDiscovery;
 import org.apache.camel.component.jackson.JacksonDataFormat;
+import org.apache.camel.component.ribbon.RibbonConfiguration;
+import org.apache.camel.component.ribbon.cloud.RibbonServiceLoadBalancer;
+import org.apache.camel.model.cloud.ServiceCallConfigurationDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
-import org.apache.camel.model.remote.ConsulConfigurationDefinition;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import com.netflix.config.DynamicIntProperty;
 
 import pl.piomin.services.camel.common.model.Account;
 import pl.piomin.services.camel.common.model.Customer;
@@ -32,10 +38,21 @@ public class CustomerRoute extends RouteBuilder {
 		format.useList();
 		format.setUnmarshalType(Account.class);
 		
-		ConsulConfigurationDefinition config = new ConsulConfigurationDefinition();
-		config.setComponent("netty4-http");
+		ServiceCallConfigurationDefinition def = new ServiceCallConfigurationDefinition();
+		
+		ConsulConfiguration config = new ConsulConfiguration();
 		config.setUrl("http://192.168.99.100:8500");
-		context.setServiceCallConfiguration(config);
+		ConsulServiceDiscovery discovery = new ConsulServiceDiscovery(config);
+//		config.setComponent("netty4-http");
+		
+		RibbonConfiguration c = new RibbonConfiguration();
+		RibbonServiceLoadBalancer lb = new RibbonServiceLoadBalancer(c);
+		lb.setServiceDiscovery(discovery);
+		
+		def.setComponent("netty4-http");
+		def.setLoadBalancer(lb);
+		def.setServiceDiscovery(discovery);
+//		context.setServiceCallConfiguration(def);
 		
 		restConfiguration()
 			.component("netty4-http")
@@ -62,15 +79,20 @@ public class CustomerRoute extends RouteBuilder {
 			.log("Msg: ${body}").enrich("direct:acc", new AggregationStrategyImpl());
 		
 		
-		from("direct:acc")
-			.hystrix()
-				.hystrixConfiguration()
-					.executionTimeoutInMilliseconds(2000)
-				.end()
-				.setBody().constant(null).serviceCall("account//account").unmarshal(format)
-			.onFallback()
-				.to("bean:accountFallback?method=getAccounts")
-			.end();
+		from("direct:acc").setBody().constant(null)
+			.serviceCall()
+				.component("netty4-http")
+			 	.consulServiceDiscovery("http://192.168.99.100:8500")
+			 	.ribbonLoadBalancer()
+				.name("account//account");
+//			.hystrix()
+//				.hystrixConfiguration()
+//					.executionTimeoutInMilliseconds(2000)
+//				.end()
+//				.setBody().constant(null).serviceCall("account//account").unmarshal(format)
+//			.onFallback()
+//				.to("bean:accountFallback?method=getAccounts")
+//			.end();
 			
 	}
 		
