@@ -62,7 +62,15 @@ public class CustomerRoute extends RouteBuilder {
 			.log("Msg: ${body}").enrich("direct:acc", new AggregationStrategyImpl());
 		
 		
-		from("direct:acc").setBody().constant(null).serviceCall("account//account").unmarshal(format);
+		from("direct:acc")
+			.hystrix()
+				.hystrixConfiguration()
+					.executionTimeoutInMilliseconds(2000)
+				.end()
+				.setBody().constant(null).serviceCall("account//account").unmarshal(format)
+			.onFallback()
+				.to("bean:accountFallback?method=getAccounts")
+			.end();
 			
 	}
 		

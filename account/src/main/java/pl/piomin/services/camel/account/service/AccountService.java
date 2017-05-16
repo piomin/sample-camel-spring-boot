@@ -3,6 +3,7 @@ package pl.piomin.services.camel.account.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import pl.piomin.services.camel.common.model.Account;
@@ -11,6 +12,9 @@ import pl.piomin.services.camel.common.model.Account;
 public class AccountService {
 
 	private List<Account> accounts = new ArrayList<>();
+
+	@Value("${port}")
+	private int port;
 	
 	public Account findById(Integer id) {
 		return new Account(id, "1234567890", 4321, 2);
@@ -20,6 +24,13 @@ public class AccountService {
 		List<Account> l = new ArrayList<>();
 		l.add(new Account(1, "1234567890", 4321, customerId));
 		l.add(new Account(2, "1234567891", 12346, customerId));
+		if (port%2 == 0) {
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		return l;
 	}
 	
