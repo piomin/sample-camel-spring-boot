@@ -77,12 +77,15 @@ public class CustomerRoute extends RouteBuilder {
 			.log("Msg: ${body}").enrich("direct:acc", new AggregationStrategyImpl());
 		
 		
-		from("direct:acc").setBody().constant(null).hystrix()
+		from("direct:acc").setBody().constant(null)
+			.hystrix()
 			.serviceCall()
 				.component("netty4-http")
 			 	.consulServiceDiscovery("http://192.168.99.100:8500")
 			 	.ribbonLoadBalancer()
-				.name("account//account").end()
+				.name("account//account")
+			.end()
+			.unmarshal(format)
 //			.hystrix()
 //				.hystrixConfiguration()
 //					.executionTimeoutInMilliseconds(2000)
@@ -90,7 +93,9 @@ public class CustomerRoute extends RouteBuilder {
 //				.setBody().constant(null).serviceCall("account//account").unmarshal(format)
 //			.onFallback()
 //				.to("bean:accountFallback?method=getAccounts")
-			.end().unmarshal(format);
+			.endHystrix()
+			.onFallback()
+			.to("bean:accountFallback?method=getAccounts");
 			
 	}
 		
