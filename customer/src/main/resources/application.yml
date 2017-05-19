@@ -13,3 +13,4 @@ camel:
 logging:
   level:
     org.apache.camel: DEBUG
+    com.netflix: DEBUG
