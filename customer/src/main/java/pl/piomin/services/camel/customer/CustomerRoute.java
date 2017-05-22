@@ -18,6 +18,7 @@ import org.apache.camel.model.cloud.ServiceCallConfigurationDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.spring.boot.cloud.CamelCloudConfigurationProperties.ServiceChooser;
+import org.apache.camel.support.ExpressionSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -50,16 +51,17 @@ public class CustomerRoute extends RouteBuilder {
 //		config.setComponent("netty4-http");
 		
 		RibbonConfiguration c = new RibbonConfiguration();
-		c.addProperty("MaxAutoRetries", "1");
+		c.addProperty("MaxAutoRetries", "0");
 		c.addProperty("MaxAutoRetriesNextServer", "1");
 		c.addProperty("ReadTimeout", "1000");
+		c.setClientName("ribbon-1");
 		RibbonServiceLoadBalancer lb = new RibbonServiceLoadBalancer(c);
 		lb.setServiceDiscovery(discovery);
 		
 		def.setComponent("netty4-http");
 		def.setLoadBalancer(lb);
 		def.setServiceDiscovery(discovery);
-//		context.setServiceCallConfiguration(def);
+		context.setServiceCallConfiguration(def);
 		
 		
 		restConfiguration()
@@ -93,17 +95,16 @@ public class CustomerRoute extends RouteBuilder {
 					.executionTimeoutInMilliseconds(2000)
 				.end()
 			.serviceCall()
-				.component("netty4-http")
-			 	.consulServiceDiscovery("http://192.168.99.100:8500")
-			 	.ribbonLoadBalancer("ribbon-1")
 				.name("account//account")
-				
+				.component("netty4-http")
+				.ribbonLoadBalancer("ribbon-1")
+			 	.consulServiceDiscovery("http://192.168.99.100:8500")
 			.end()
 			.unmarshal(format)
 			.endHystrix()
 			.onFallback()
 			.to("bean:accountFallback?method=getAccounts");
-			
+
 	}
 		
 }
