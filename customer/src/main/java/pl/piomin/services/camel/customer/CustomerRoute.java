@@ -1,17 +1,23 @@
 package pl.piomin.services.camel.customer;
 
+import java.util.List;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ShutdownRunningTask;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.cloud.ServiceDefinition;
+import org.apache.camel.cloud.ServiceFilter;
 import org.apache.camel.component.consul.ConsulConfiguration;
 import org.apache.camel.component.consul.cloud.ConsulServiceDiscovery;
 import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.component.ribbon.RibbonConfiguration;
 import org.apache.camel.component.ribbon.cloud.RibbonServiceLoadBalancer;
+import org.apache.camel.impl.cloud.PassThroughServiceFilter;
 import org.apache.camel.model.cloud.ServiceCallConfigurationDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.apache.camel.spring.boot.cloud.CamelCloudConfigurationProperties.ServiceChooser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -44,6 +50,9 @@ public class CustomerRoute extends RouteBuilder {
 //		config.setComponent("netty4-http");
 		
 		RibbonConfiguration c = new RibbonConfiguration();
+		c.addProperty("MaxAutoRetries", "1");
+		c.addProperty("MaxAutoRetriesNextServer", "1");
+		c.addProperty("ReadTimeout", "1000");
 		RibbonServiceLoadBalancer lb = new RibbonServiceLoadBalancer(c);
 		lb.setServiceDiscovery(discovery);
 		
@@ -51,6 +60,7 @@ public class CustomerRoute extends RouteBuilder {
 		def.setLoadBalancer(lb);
 		def.setServiceDiscovery(discovery);
 //		context.setServiceCallConfiguration(def);
+		
 		
 		restConfiguration()
 			.component("netty4-http")
@@ -79,20 +89,17 @@ public class CustomerRoute extends RouteBuilder {
 		
 		from("direct:acc").setBody().constant(null)
 			.hystrix()
+				.hystrixConfiguration()
+					.executionTimeoutInMilliseconds(2000)
+				.end()
 			.serviceCall()
 				.component("netty4-http")
 			 	.consulServiceDiscovery("http://192.168.99.100:8500")
 			 	.ribbonLoadBalancer("ribbon-1")
 				.name("account//account")
+				
 			.end()
 			.unmarshal(format)
-//			.hystrix()
-//				.hystrixConfiguration()
-//					.executionTimeoutInMilliseconds(2000)
-//				.end()
-//				.setBody().constant(null).serviceCall("account//account").unmarshal(format)
-//			.onFallback()
-//				.to("bean:accountFallback?method=getAccounts")
 			.endHystrix()
 			.onFallback()
 			.to("bean:accountFallback?method=getAccounts");
