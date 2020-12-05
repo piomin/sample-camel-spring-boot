@@ -28,10 +28,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel.springboot</groupId>
-			<artifactId>camel-consul-starter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel.springboot</groupId>
 			<artifactId>camel-zipkin-starter</artifactId>
 		</dependency>
 		<dependency>

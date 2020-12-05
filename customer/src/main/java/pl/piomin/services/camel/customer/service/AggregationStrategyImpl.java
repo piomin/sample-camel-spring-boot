@@ -2,8 +2,8 @@ package pl.piomin.services.camel.customer.service;
 
 import java.util.List;
 
+import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
 
 import pl.piomin.services.camel.common.model.Account;
 import pl.piomin.services.camel.common.model.Customer;

@@ -1,16 +1,17 @@
 package pl.piomin.services.camel.gateway;
 
+import java.util.List;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jackson.JacksonDataFormat;
-import org.apache.camel.model.remote.ConsulConfigurationDefinition;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestParamType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import pl.piomin.services.camel.common.model.Account;
 import pl.piomin.services.camel.common.model.Customer;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class RouteGateway extends RouteBuilder {
@@ -20,11 +21,6 @@ public class RouteGateway extends RouteBuilder {
 	
     @Override
     public void configure() throws Exception {
-        
-		ConsulConfigurationDefinition config = new ConsulConfigurationDefinition();
-		config.setComponent("netty4-http");
-		config.setUrl("http://192.168.99.100:8500");
-		context.setServiceCallConfiguration(config);
         
 		restConfiguration()
 			.component("netty4-http")
@@ -50,10 +46,10 @@ public class RouteGateway extends RouteBuilder {
 				.param().name("customerId").type(RestParamType.path).description("Customer identificator").dataType("int").endParam()
 				.route().serviceCall("account").unmarshal(formatAcc)
 				.endRest()				
-			.get("/").description("Find all accounts").outTypeList(Account.class)
+			.get("/").description("Find all accounts").outType(List.class)
 				.route().serviceCall("account").unmarshal(formatAccList)
 				.endRest()
-			.post("/").description("Add new account").outTypeList(Account.class)
+			.post("/").description("Add new account").outType(List.class)
 				.param().name("account").type(RestParamType.body).description("Account JSON object").dataType("Account").endParam()
 				.route().serviceCall("account").unmarshal(formatAcc)
 				.endRest();
@@ -63,10 +59,10 @@ public class RouteGateway extends RouteBuilder {
 				.param().name("id").type(RestParamType.path).description("Customer identificator").dataType("int").endParam()
 				.route().serviceCall("customer").unmarshal(formatCus)
 				.endRest()
-			.get("/").description("Find all customers").outTypeList(Customer.class)
+			.get("/").description("Find all customers").outType(List.class)
 				.route().serviceCall("customer").unmarshal(formatCusList)
 				.endRest()
-			.post("/").description("Add new customer").outTypeList(Customer.class)
+			.post("/").description("Add new customer").outType(List.class)
 				.param().name("customer").type(RestParamType.body).description("Customer JSON object").dataType("Account").endParam()
 				.route().serviceCall("customer").unmarshal(formatCus)
 				.endRest();
