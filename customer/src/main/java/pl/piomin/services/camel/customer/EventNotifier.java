@@ -1,4 +1,4 @@
-package pl.piomin.services.camel.account;
+package pl.piomin.services.camel.customer;
 
 import java.util.EventObject;
 
@@ -23,12 +23,12 @@ public class EventNotifier extends EventNotifierSupport {
 		if (event instanceof CamelContextStartedEvent) {
 			CamelContext context = ((CamelContextStartedEvent) event).getContext();
 			ProducerTemplate t = context.createProducerTemplate();
-			t.sendBody("direct:start", new Register("account" + port, "account", "127.0.0.1", port));
+			t.sendBody("direct:start", new Register("customer" + port, "customer", "127.0.0.1", port));
 		}
 		if (event instanceof CamelContextStoppingEvent) {
 			CamelContext context = ((CamelContextStoppingEvent) event).getContext();
 			ProducerTemplate t = context.createProducerTemplate();
-			t.sendBodyAndHeader("direct:stop", null, "id", "account" + port);
+			t.sendBodyAndHeader("direct:stop", null, "id", "customer" + port);
 		}
 	}
 

@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>gateway</artifactId>
 
-	<dependencies>
+	<dependencies>	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -27,7 +27,22 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-http</artifactId>
 			<version>${camel.version}</version>
-			</dependency>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jackson</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-swagger-java-starter</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>pl.piomin.services</groupId>
+			<artifactId>camel-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 </project>

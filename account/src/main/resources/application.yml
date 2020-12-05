@@ -1,7 +1,15 @@
 camel:
   springboot:
+    name: account-service
     main-run-controller: true
-    
+  zipkin:
+    host-name: 192.168.99.100
+    port: 9410
+    server-service-mappings.direct*: consul-acc-reg
+    client-service-mappings.direct*: consul-acc-reg
+    server-service-mappings.route*: account-service
+    client-service-mappings.route*: account-service
+        
 logging:
   level:
     org.apache.camel: DEBUG

@@ -8,7 +8,7 @@ import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import pl.piomin.services.camel.account.model.Account;
+import pl.piomin.services.camel.common.model.Account;
 
 @Component
 public class AccountRoute extends RouteBuilder {
@@ -20,11 +20,11 @@ public class AccountRoute extends RouteBuilder {
 	public void configure() throws Exception { 
 		
 		restConfiguration()
-			.component("netty-http")
+			.component("netty4-http")
 			.bindingMode(RestBindingMode.json)
 			.port(port);
 		
-		from("direct:start").marshal().json(JsonLibrary.Jackson)
+		from("direct:start").routeId("account-consul").marshal().json(JsonLibrary.Jackson)
 			.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
 			.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 			.to("http://192.168.99.100:8500/v1/agent/service/register");
