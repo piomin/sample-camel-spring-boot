@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccountRoute extends RouteBuilder {
 	
-	@Value("${port}")
-	private int port;
+//	@Value("${port}")
+//	private int port;
 		
 	@Override
 	public void configure() throws Exception { 
 		
 		restConfiguration()
-			.component("netty4-http")
+			.component("netty-http")
 			.bindingMode(RestBindingMode.json)
-			.port(port);
+			.port(8080);
 		
 //		from("direct:start").routeId("account-consul").marshal().json(JsonLibrary.Jackson)
 //			.setHeader(Exchange.HTTP_METHOD, constant("PUT"))

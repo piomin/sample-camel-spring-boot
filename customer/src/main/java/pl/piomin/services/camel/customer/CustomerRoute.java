@@ -17,9 +17,6 @@ public class CustomerRoute extends RouteBuilder {
 		
 	@Autowired
 	CamelContext context;
-	
-	@Value("${port}")
-	private int port;
 			
 	@Override
 	public void configure() throws Exception { 
@@ -29,9 +26,9 @@ public class CustomerRoute extends RouteBuilder {
 		format.setUnmarshalType(Account.class);
 		
 		restConfiguration()
-			.component("netty4-http")
+			.component("netty-http")
 			.bindingMode(RestBindingMode.json)
-			.port(port);
+			.port(8080);
 		
 //		from("direct:start").routeId("account-consul").marshal().json(JsonLibrary.Jackson)
 //			.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
@@ -53,7 +50,7 @@ public class CustomerRoute extends RouteBuilder {
 			.log("Msg: ${body}").enrich("direct:acc", new AggregationStrategyImpl());
 		
 		
-		from("direct:acc").setBody().constant(null).serviceCall("account//account").unmarshal(format);
+		from("direct:acc").setBody().constant(null).to("http://account:8080").unmarshal(format);
 			
 	}
 		
