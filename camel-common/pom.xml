@@ -8,11 +8,12 @@
 	</parent>
 	<artifactId>camel-common</artifactId>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>
-	</dependencies>
+<!--	<dependencies>-->
+<!--		<dependency>-->
+<!--			<groupId>org.projectlombok</groupId>-->
+<!--			<artifactId>lombok</artifactId>-->
+<!--			<version>1.18.24</version>-->
+<!--		</dependency>-->
+<!--	</dependencies>-->
 
 </project>
