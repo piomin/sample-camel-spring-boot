@@ -42,7 +42,7 @@ public class CustomerRoute extends RouteBuilder {
 				.to("bean:customerService?method=findAll")
 			.post("/").consumes("application/json").type(Customer.class)
 				.to("bean:customerService?method=add(${body})")
-			.get("/{id}").to("direct:account");
+			.get("/{id}").to("direct:account").produces("application/json");
 		
 		
 		from("direct:account")

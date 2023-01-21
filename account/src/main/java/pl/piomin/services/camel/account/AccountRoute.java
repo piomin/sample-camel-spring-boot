@@ -30,7 +30,7 @@ public class AccountRoute extends RouteBuilder {
 		
 		rest("/account")
 			.get("/{id}")
-				.to("bean:accountService?method=findById(${header.id})")
+				.to("bean:accountService?method=findById(${header.id})").produces("application/json")
 			.get("/customer/{customerId}")
 				.to("bean:accountService?method=findByCustomerId(${header.customerId})")
 			.get("/")
