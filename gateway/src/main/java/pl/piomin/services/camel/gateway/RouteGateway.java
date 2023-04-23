@@ -15,13 +15,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RouteGateway extends RouteBuilder {
- 
+
 	@Autowired
 	CamelContext context;
-	
+
     @Override
     public void configure() throws Exception {
-        
+
 		restConfiguration()
 			.component("netty4-http")
 			.bindingMode(RestBindingMode.json)
@@ -29,51 +29,42 @@ public class RouteGateway extends RouteBuilder {
 			.apiContextPath("/api-doc")
             .apiProperty("api.title", "Example API").apiProperty("api.version", "1.0")
             .apiProperty("cors", "true");
-		
+
 		JacksonDataFormat formatAcc = new JacksonDataFormat(Account.class);
 		JacksonDataFormat formatCus = new JacksonDataFormat(Customer.class);
 		JacksonDataFormat formatAccList = new JacksonDataFormat(Account.class);
 		formatAccList.useList();
 		JacksonDataFormat formatCusList = new JacksonDataFormat(Customer.class);
 		formatAccList.useList();
-		
+
 		rest("/account")
 			.get("/{id}").description("Find account by id").outType(Account.class)
 				.param().name("id").type(RestParamType.path).description("Account identificator").dataType("int").endParam()
-				.route().serviceCall("account").unmarshal(formatAcc)
-				.endRest()
+				.to("direct:callAccount")
 			.get("/customer/{customerId}").description("Find account by customer id").outType(Account.class)
 				.param().name("customerId").type(RestParamType.path).description("Customer identificator").dataType("int").endParam()
-				.route().serviceCall("account").unmarshal(formatAcc)
-				.endRest()				
+				.to("direct:callAccount")
 			.get("/").description("Find all accounts").outType(List.class)
-				.route().serviceCall("account").unmarshal(formatAccList)
-				.endRest()
+				.to("direct:callAccountList")
 			.post("/").description("Add new account").outType(List.class)
 				.param().name("account").type(RestParamType.body).description("Account JSON object").dataType("Account").endParam()
-				.route().serviceCall("account").unmarshal(formatAcc)
-				.endRest();
-		
+				.to("direct:callAccount");
+
 		rest("/customer")
 			.get("/{id}").description("Find customer by id").outType(Customer.class)
 				.param().name("id").type(RestParamType.path).description("Customer identificator").dataType("int").endParam()
-				.route().serviceCall("customer").unmarshal(formatCus)
-				.endRest()
+				.to("direct:callCustomer")
 			.get("/").description("Find all customers").outType(List.class)
-				.route().serviceCall("customer").unmarshal(formatCusList)
-				.endRest()
+				.to("direct:callCustomerList")
 			.post("/").description("Add new customer").outType(List.class)
 				.param().name("customer").type(RestParamType.body).description("Customer JSON object").dataType("Account").endParam()
-				.route().serviceCall("customer").unmarshal(formatCus)
-				.endRest();
-		
-//		from("rest:get:account:/{id}").serviceCall("account");
-//		from("rest:get:account:/customer/{customerId}").serviceCall("account");
-//		from("rest:get:account:/").serviceCall("account");
-//		from("rest:post:account:/").serviceCall("account");
-//		from("rest:get:customer:/{id}").serviceCall("customer");
-//		from("rest:get:customer:/").serviceCall("customer");
-//		from("rest:post:customer:/").serviceCall("customer");
+				.to("direct:callCustomer");
+
+		from("direct:callAccount").serviceCall("account").unmarshal(formatAcc);
+		from("direct:callAccountList").serviceCall("account").unmarshal(formatAccList);
+		from("direct:callCustomer").serviceCall("customer").unmarshal(formatCus);
+		from("direct:callCustomerList").serviceCall("customer").unmarshal(formatCusList);
+
     }
 
 }
