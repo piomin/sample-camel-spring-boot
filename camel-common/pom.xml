@@ -8,6 +8,10 @@
 	</parent>
 	<artifactId>camel-common</artifactId>
 
+	<properties>
+		<sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+	</properties>
+
 <!--	<dependencies>-->
 <!--		<dependency>-->
 <!--			<groupId>org.projectlombok</groupId>-->
