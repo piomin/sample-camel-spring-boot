@@ -10,21 +10,21 @@ import pl.piomin.services.camel.common.model.Customer;
 @SpringBootTest
 public class CustomerRouteTests {
 
-	TestRestTemplate restTemplate = new TestRestTemplate();
+    TestRestTemplate restTemplate = new TestRestTemplate();
 
-	@Test
-	public void add() {
-		Customer a = Instancio.create(Customer.class);
-		a = restTemplate.postForObject("http://localhost:8080/customer", a, Customer.class);
-		Assertions.assertNotNull(a);
-		Assertions.assertEquals(1, a.getId());
-	}
+    @Test
+    public void add() {
+        Customer a = Instancio.create(Customer.class);
+        a = restTemplate.postForObject("http://localhost:8080/customer", a, Customer.class);
+        Assertions.assertNotNull(a);
+        Assertions.assertEquals(1, a.getId());
+    }
 
-	@Test
-	public void findAll() {
-		Customer[] customers = restTemplate.getForObject("http://localhost:8080/customer", Customer[].class);
-		Assertions.assertTrue(customers.length > 0);
-	}
+    @Test
+    public void findAll() {
+        Customer[] customers = restTemplate.getForObject("http://localhost:8080/customer", Customer[].class);
+        Assertions.assertTrue(customers.length > 0);
+    }
 
 //	@Test
 //	public void findById() {

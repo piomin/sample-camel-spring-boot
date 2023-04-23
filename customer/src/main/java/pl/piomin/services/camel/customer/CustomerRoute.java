@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomerRoute extends RouteBuilder {
 		
-	@Autowired
-	CamelContext context;
+//	@Autowired
+//	CamelContext context;
 			
 	@Override
 	public void configure() throws Exception { 
