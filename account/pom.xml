@@ -8,6 +8,10 @@
 	</parent>
 	<artifactId>account</artifactId>
 
+	<properties>
+		<sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
