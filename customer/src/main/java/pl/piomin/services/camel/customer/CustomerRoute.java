@@ -4,13 +4,11 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import pl.piomin.services.camel.common.model.Account;
 import pl.piomin.services.camel.common.model.Customer;
 import pl.piomin.services.camel.customer.service.AggregationStrategyImpl;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 @Component
 public class CustomerRoute extends RouteBuilder {
