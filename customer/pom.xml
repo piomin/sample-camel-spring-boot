@@ -8,6 +8,10 @@
 	</parent>
 	<artifactId>customer</artifactId>
 
+	<properties>
+		<sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
@@ -57,7 +61,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.8</version>
+				<version>0.8.9</version>
 				<executions>
 					<execution>
 						<goals>

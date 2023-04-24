@@ -14,20 +14,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 //@SpringBootTest
 public class GatewayTest {
 
-	@Autowired
-	ProducerTemplate template;
-	
+    @Autowired
+    ProducerTemplate template;
+
     @EndpointInject(uri = "mock:test")
     MockEndpoint mockEndpoint;
-    
-//	@Test
+
+    //	@Test
 //	@Ignore
-	public void test1() throws InterruptedException {
-		System.out.println("Test");
-		Thread.sleep(3000);
-		mockEndpoint.setExpectedMessageCount(1);
-		template.sendBody("direct:start", "This is a test message");
-		mockEndpoint.assertIsSatisfied();
-	}
-	
+    public void test1() throws InterruptedException {
+        System.out.println("Test");
+        Thread.sleep(3000);
+        mockEndpoint.setExpectedMessageCount(1);
+        template.sendBody("direct:start", "This is a test message");
+        mockEndpoint.assertIsSatisfied();
+    }
+
 }
