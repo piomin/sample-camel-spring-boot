@@ -31,7 +31,7 @@ public class RouteGateway extends RouteBuilder {
         JacksonDataFormat formatAccList = new JacksonDataFormat(Account.class);
         formatAccList.useList();
         JacksonDataFormat formatCusList = new JacksonDataFormat(Customer.class);
-        formatAccList.useList();
+        formatCusList.useList();
 
 //		rest("/account")
 //			.get("/{id}").description("Find account by id").outType(Account.class)
