@@ -10,24 +10,29 @@ import pl.piomin.services.camel.common.model.Customer;
 @SpringBootTest
 public class CustomerRouteTests {
 
-	TestRestTemplate restTemplate = new TestRestTemplate();
+    TestRestTemplate restTemplate = new TestRestTemplate();
 
-	@Test
-	public void add() {
-		Customer a = Instancio.create(Customer.class);
-		a = restTemplate.postForObject("http://localhost:8080/customer", a, Customer.class);
-		Assertions.assertNotNull(a);
-		Assertions.assertEquals(1, a.getId());
-	}
+    @Test
+    public void add() {
+        Customer c = Instancio.create(Customer.class);
+        c = restTemplate.postForObject("http://localhost:8080/customer", c, Customer.class);
+        Assertions.assertNotNull(c);
+        Assertions.assertEquals(1, c.getId());
+    }
 
-	@Test
-	public void findAll() {
-		Customer[] customers = restTemplate.getForObject("http://localhost:8080/customer", Customer[].class);
-		Assertions.assertTrue(customers.length > 0);
-	}
+    @Test
+    public void findAll() {
+        Customer[] customers = restTemplate.getForObject("http://localhost:8080/customer", Customer[].class);
+        Assertions.assertTrue(customers.length > 0);
+    }
 
 //	@Test
-//	public void findById() {
+//	public void findById(Hoverfly hoverfly) {
+//        hoverfly.simulate(
+//                dsl(service("http://account:8080")
+//                        .get("/customer/1")
+//                        .willReturn(success("[{\"id\":\"1\",\"number\":\"1234567890\"}]", "application/json"))
+//        ));
 //		Customer a = restTemplate.getForObject("http://localhost:8080/customer/1", Customer.class);
 //		Assertions.assertNotNull(a);
 //		Assertions.assertEquals(1, a.getId());

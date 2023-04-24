@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @CamelZipkin
 public class CamelCustomerService {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CamelCustomerService.class, args);
-	}
-	
+    public static void main(String[] args) {
+        SpringApplication.run(CamelCustomerService.class, args);
+    }
+
 }
