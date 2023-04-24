@@ -3,8 +3,8 @@ camel:
     name: customer-service
     main-run-controller: true
   zipkin:
-    host-name: 192.168.99.100
-    port: 9410
+    host-name: localhost
+    port: 9411
     server-service-mappings.direct*: consul-cust-reg
     client-service-mappings.direct*: consul-cust-reg
     server-service-mappings.route*: customer-service
