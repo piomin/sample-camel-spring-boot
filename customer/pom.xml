@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-zipkin-starter</artifactId>
+            <artifactId>camel-opentelemetry-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>pl.piomin.services</groupId>
