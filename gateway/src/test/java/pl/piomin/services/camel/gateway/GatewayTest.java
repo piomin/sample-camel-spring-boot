@@ -17,7 +17,7 @@ public class GatewayTest {
     @Autowired
     ProducerTemplate template;
 
-    @EndpointInject(uri = "mock:test")
+//    @EndpointInject(uri = "mock:test")
     MockEndpoint mockEndpoint;
 
     //	@Test
