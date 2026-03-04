@@ -2,6 +2,9 @@ camel:
   springboot:
     name: account-service
     main-run-controller: true
+  component:
+    consul:
+      url: http://localhost:8500
   zipkin:
     host-name: localhost
     port: 9411
