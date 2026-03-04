@@ -1,9 +1,10 @@
 package pl.piomin.services.camel.account;
 
 import org.instancio.Instancio;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import pl.piomin.services.camel.common.model.Account;
 
 @SpringBootTest
